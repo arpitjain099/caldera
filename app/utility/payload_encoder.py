@@ -25,6 +25,10 @@ DEFAULT_KEY = [0x32, 0x45, 0x32, 0xca]
 def xor_bytes(in_bytes, key=None):
     if not key:
         key = DEFAULT_KEY
+    if isinstance(key, str):
+        # The -key command-line argument arrives as text, and indexing a str
+        # yields a str, which cannot be XOR'ed with an int.
+        key = key.encode()
     arr = array.array('B', in_bytes)
     for i, val in enumerate(arr):
         cur_key = key[i % len(key)]
